@@ -17,11 +17,11 @@ const GIFT_COLORS = {
 };
 
 function GiftCard({ tier }) {
-  const { showToast } = useApp();
+  const { addToCart } = useApp();
   const [note, setNote] = useState("");
 
   const handleAdd = () => {
-    showToast(`${tier.name} added to cart!`);
+    addToCart(tier.slug);
     setNote("");
   };
 
