@@ -18,7 +18,7 @@ export default function ProductCard({ product }) {
 
   return (
     <article
-      className="product-card"
+      className="product-card tilt-card"
       onClick={() => navigate(`/product/${product.slug}`)}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {

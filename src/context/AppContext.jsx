@@ -31,8 +31,8 @@ export function AppProvider({ children }) {
   }, []);
 
   const addToCart = useCallback(
-    (slug) => {
-      setCart((prev) => [...prev, slug]);
+    (slug, note = "") => {
+      setCart((prev) => [...prev, { slug, note }]);
       const item = products.find((p) => p.slug === slug);
       if (item) showToast(`Added ${item.name} to cart`);
     },
@@ -46,7 +46,12 @@ export function AppProvider({ children }) {
   const clearCart = useCallback(() => setCart([]), []);
 
   const cartItems = cart
-    .map((slug) => products.find((p) => p.slug === slug))
+    .map((entry) => {
+      const slug = typeof entry === "string" ? entry : entry.slug;
+      const note = typeof entry === "object" ? (entry.note || "") : "";
+      const product = products.find((p) => p.slug === slug);
+      return product ? { ...product, note } : null;
+    })
     .filter(Boolean);
 
   const value = {

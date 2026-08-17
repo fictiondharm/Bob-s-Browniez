@@ -19,14 +19,37 @@ const GIFT_COLORS = {
 function GiftCard({ tier }) {
   const { addToCart } = useApp();
   const [note, setNote] = useState("");
+  const [celebrating, setCelebrating] = useState(false);
 
   const handleAdd = () => {
-    addToCart(tier.slug);
+    addToCart(tier.slug, note);
     setNote("");
+    setCelebrating(true);
+
+    const card = document.querySelector(`[data-gift="${tier.slug}"]`);
+    if (card) {
+      const colors = ["#a3346a", "#ffd166", "#2a180d", "#e8a87c", "#d4a5a5"];
+      for (let i = 0; i < 12; i++) {
+        const particle = document.createElement("div");
+        particle.className = "confetti-particle";
+        particle.style.cssText = `
+          left: ${50 + (Math.random() - 0.5) * 60}%;
+          top: 60%;
+          background: ${colors[i % colors.length]};
+          --tx: ${(Math.random() - 0.5) * 120}px;
+          --ty: ${-40 - Math.random() * 80}px;
+          animation: confettiFall ${0.5 + Math.random() * 0.4}s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        `;
+        card.appendChild(particle);
+        setTimeout(() => particle.remove(), 1000);
+      }
+    }
+
+    setTimeout(() => setCelebrating(false), 600);
   };
 
   return (
-    <div className="gift-card">
+    <div className="gift-card" data-gift={tier.slug}>
       <div
         className="gift-card-visual"
         style={{ background: GIFT_COLORS[tier.slug] }}
@@ -58,7 +81,10 @@ function GiftCard({ tier }) {
             onChange={(e) => setNote(e.target.value)}
           />
         </label>
-        <button className="btn btn-primary btn-block gift-add" onClick={handleAdd}>
+        <button
+          className={`btn btn-primary btn-block gift-add${celebrating ? " celebrating" : ""}`}
+          onClick={handleAdd}
+        >
           Add to Cart &middot; Rs. {tier.price}
         </button>
       </div>
@@ -71,11 +97,11 @@ export default function Gifting() {
     <>
       <section className="section" style={{ paddingBottom: 16 }}>
         <div className="container">
-          <span className="eyebrow eyebrow-yellow">Gifting</span>
-          <h1 className="headline-xl mt-stack-sm" style={{ fontSize: 40 }}>
+          <span className="eyebrow eyebrow-yellow reveal">Gifting</span>
+          <h1 className="headline-xl mt-stack-sm reveal" style={{ fontSize: 40, "--reveal-delay": "0.05s" }}>
             Send a box.
           </h1>
-          <p className="body-lg text-muted mt-stack-sm" style={{ maxWidth: 560 }}>
+          <p className="body-lg text-muted mt-stack-sm reveal" style={{ maxWidth: 560, "--reveal-delay": "0.1s" }}>
             Pick a gift size, add a note, and we&rsquo;ll box it up with a
             handwritten touch. Baked fresh and delivered on the weekend.
           </p>
@@ -84,7 +110,7 @@ export default function Gifting() {
 
       <section className="section" style={{ paddingTop: 16, paddingBottom: 0 }}>
         <div className="container">
-          <div className="gift-grid">
+          <div className="gift-grid stagger-children">
             {giftBoxes.map((tier) => (
               <GiftCard key={tier.slug} tier={tier} />
             ))}

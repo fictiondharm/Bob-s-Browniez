@@ -47,11 +47,11 @@ export default function Shop() {
     <>
       <section className="section" style={{ paddingBottom: 16 }}>
         <div className="container">
-          <span className="eyebrow eyebrow-brown">Full Menu</span>
-          <h1 className="headline-xl mt-stack-sm" style={{ fontSize: 40 }}>
+          <span className="eyebrow eyebrow-brown reveal">Full Menu</span>
+          <h1 className="headline-xl mt-stack-sm reveal" style={{ fontSize: 40, "--reveal-delay": "0.05s" }}>
             Every Bite, Sorted.
           </h1>
-          <p className="body-lg text-muted mt-stack-sm" style={{ maxWidth: 560 }}>
+          <p className="body-lg text-muted mt-stack-sm reveal" style={{ maxWidth: 560, "--reveal-delay": "0.1s" }}>
             Handcrafted in small batches, priced per bite, and baked fresh every
             weekend.
           </p>

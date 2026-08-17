@@ -47,11 +47,11 @@ export default function Order() {
     <>
       <section className="section" style={{ paddingBottom: 24 }}>
         <div className="container">
-          <span className="eyebrow eyebrow-brown">Order</span>
-          <h1 className="headline-xl mt-stack-sm" style={{ fontSize: 40 }}>
+          <span className="eyebrow eyebrow-brown reveal">Order</span>
+          <h1 className="headline-xl mt-stack-sm reveal" style={{ fontSize: 40, "--reveal-delay": "0.05s" }}>
             Get your fix this weekend.
           </h1>
-          <p className="body-lg text-muted mt-stack-sm" style={{ maxWidth: 560 }}>
+          <p className="body-lg text-muted mt-stack-sm reveal" style={{ maxWidth: 560, "--reveal-delay": "0.1s" }}>
             We bake Saturday &amp; Sunday and deliver fresh to your door.
           </p>
         </div>
@@ -124,6 +124,9 @@ export default function Order() {
                         <div className="order-item-info">
                           <span className="order-item-name">{item.name}</span>
                           <span className="order-item-meta">{item.category}</span>
+                          {item.note && (
+                            <span className="order-item-note">&ldquo;{item.note}&rdquo;</span>
+                          )}
                         </div>
                         <button
                           className="order-item-remove"
