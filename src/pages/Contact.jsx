@@ -27,11 +27,11 @@ export default function Contact() {
     <>
       <section className="section" style={{ paddingBottom: 24 }}>
         <div className="container">
-          <span className="eyebrow eyebrow-blue reveal">Contact</span>
-          <h1 className="headline-xl mt-stack-sm reveal" style={{ fontSize: 40, "--reveal-delay": "0.05s" }}>
+          <span className="eyebrow eyebrow-blue">Contact</span>
+          <h1 className="headline-xl mt-stack-sm" style={{ fontSize: 40 }}>
             Say hello.
           </h1>
-          <p className="body-lg text-muted mt-stack-sm reveal" style={{ maxWidth: 560, "--reveal-delay": "0.1s" }}>
+          <p className="body-lg text-muted mt-stack-sm" style={{ maxWidth: 560 }}>
             Questions about an order, corporate gifting, or just craving
             brownies? We reply fast.
           </p>
@@ -41,7 +41,7 @@ export default function Contact() {
       <section className="section" style={{ paddingTop: 0 }}>
         <div className="container">
           <div className="contact-layout">
-            <div className="contact-info-side reveal-left">
+            <div className="contact-info-side">
               <h3 className="headline-md mb-stack-sm">Get in touch</h3>
               <p className="text-muted mb-stack-md" style={{ fontSize: 15, lineHeight: 1.6 }}>
                 Whether it&rsquo;s a question about your order, a corporate gifting
@@ -78,7 +78,7 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="form-card contact-form-side reveal-right" style={{ "--reveal-delay": "0.15s" }}>
+            <div className="form-card contact-form-side">
               {sent ? (
                 <div className="form-success">
                   <span className="material-symbols-outlined">mark_email_read</span>

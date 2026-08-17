@@ -41,13 +41,13 @@ export default function ProductDetail() {
         </Link>
 
         <div className="product-detail" style={{ marginTop: 4 }}>
-          <div className="product-detail-media reveal-left">
+          <div className="product-detail-media">
             <div className="hero-blob" style={{ borderWidth: 6, boxShadow: "var(--shadow-soft-lg)" }}>
               <img src={product.img} alt={product.name} />
             </div>
           </div>
 
-          <div className="product-detail-info reveal-right" style={{ "--reveal-delay": "0.1s" }}>
+          <div className="product-detail-info">
             {product.badge && (
               <span className={`product-badge ${product.badgeClass}`} style={{ position: "static", transform: "rotate(-6deg)" }}>
                 {product.badge}

@@ -85,11 +85,11 @@ export default function BuildABox() {
     <>
       <section className="section" style={{ paddingBottom: 16 }}>
         <div className="container">
-          <span className="eyebrow reveal">Custom Treats</span>
-          <h1 className="headline-xl mt-stack-sm reveal" style={{ fontSize: 40, "--reveal-delay": "0.05s" }}>
+          <span className="eyebrow">Custom Treats</span>
+          <h1 className="headline-xl mt-stack-sm" style={{ fontSize: 40 }}>
             Build your perfect box.
           </h1>
-          <p className="body-lg text-muted mt-stack-sm reveal" style={{ maxWidth: 560, "--reveal-delay": "0.1s" }}>
+          <p className="body-lg text-muted mt-stack-sm" style={{ maxWidth: 560 }}>
             Pick a size, then tap flavors to fill your box. Perfect for sharing
             (or keeping all to yourself).
           </p>

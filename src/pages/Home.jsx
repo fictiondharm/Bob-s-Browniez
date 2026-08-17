@@ -21,7 +21,7 @@ export default function Home() {
       style={{ backgroundColor: BG_COLORS[index], minHeight: "100vh" }}
     >
       <header className="container hero-inner">
-        <div className="hero-text reveal">
+        <div className="hero-text">
           <span className="eyebrow">Sweet Weekend Vibes</span>
           <h1 className="headline-xl">
             Your Weekend Treat,
@@ -39,7 +39,7 @@ export default function Home() {
               </Link>
             </div>
         </div>
-        <div className="hero-visual reveal-right" style={{ "--reveal-delay": "0.15s" }}>
+        <div className="hero-visual">
           <div className="hero-blob">
             {heroImages.map((src, i) => (
               <img
@@ -55,7 +55,7 @@ export default function Home() {
 
       <section className="section-tight">
         <div className="container">
-          <div className="policy-banner reveal" style={{ "--reveal-delay": "0.3s" }}>
+          <div className="policy-banner">
             <span className="material-symbols-outlined">calendar_month</span>
             <div>
               <h3 className="headline-md">Weekend Baking Protocol!</h3>

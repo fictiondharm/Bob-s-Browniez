@@ -14,6 +14,8 @@ function ScrollToTop() {
 
 function ScrollReveal() {
   useEffect(() => {
+    const SELECTOR = ".reveal, .reveal-left, .reveal-right, .reveal-scale";
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -23,15 +25,24 @@ function ScrollReveal() {
           }
         });
       },
-      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
+      { threshold: 0.05, rootMargin: "0px 0px -20px 0px" }
     );
 
-    const timer = setTimeout(() => {
-      document.querySelectorAll(".reveal, .reveal-left, .reveal-right, .reveal-scale").forEach((el) => observer.observe(el));
-    }, 100);
+    // Observe after a frame so the DOM is painted
+    const raf = requestAnimationFrame(() => {
+      document.querySelectorAll(SELECTOR).forEach((el) => {
+        // If already in viewport, mark visible immediately
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight + 50) {
+          el.classList.add("visible");
+        } else {
+          observer.observe(el);
+        }
+      });
+    });
 
     return () => {
-      clearTimeout(timer);
+      cancelAnimationFrame(raf);
       observer.disconnect();
     };
   }, [useLocation().pathname]);

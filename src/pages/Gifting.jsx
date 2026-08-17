@@ -97,11 +97,11 @@ export default function Gifting() {
     <>
       <section className="section" style={{ paddingBottom: 16 }}>
         <div className="container">
-          <span className="eyebrow eyebrow-yellow reveal">Gifting</span>
-          <h1 className="headline-xl mt-stack-sm reveal" style={{ fontSize: 40, "--reveal-delay": "0.05s" }}>
+          <span className="eyebrow eyebrow-yellow">Gifting</span>
+          <h1 className="headline-xl mt-stack-sm" style={{ fontSize: 40 }}>
             Send a box.
           </h1>
-          <p className="body-lg text-muted mt-stack-sm reveal" style={{ maxWidth: 560, "--reveal-delay": "0.1s" }}>
+          <p className="body-lg text-muted mt-stack-sm" style={{ maxWidth: 560 }}>
             Pick a gift size, add a note, and we&rsquo;ll box it up with a
             handwritten touch. Baked fresh and delivered on the weekend.
           </p>
