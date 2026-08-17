@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import { giftBoxes, occasions, products } from "../data/products";
 import { useApp } from "../context/AppContext";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import ownerImage from "../assets/owner.jpg";
+import { CartReceipt } from "../components/Receipt";
 
 const GIFT_IMAGES = {
   "gift-mini": products.find((p) => p.slug === "sea-salt")?.img,
@@ -19,36 +20,19 @@ const GIFT_COLORS = {
 function GiftCard({ tier }) {
   const { addToCart } = useApp();
   const [note, setNote] = useState("");
-  const [celebrating, setCelebrating] = useState(false);
+  const [added, setAdded] = useState(false);
+  const [receipt, setReceipt] = useState(false);
 
-  const handleAdd = () => {
+  const handleAdd = useCallback(() => {
     addToCart(tier.slug, note);
     setNote("");
-    setCelebrating(true);
-
-    const card = document.querySelector(`[data-gift="${tier.slug}"]`);
-    if (card) {
-      const colors = ["#a3346a", "#ffd166", "#2a180d", "#e8a87c", "#d4a5a5"];
-      for (let i = 0; i < 12; i++) {
-        const particle = document.createElement("div");
-        particle.className = "confetti-particle";
-        particle.style.cssText = `
-          left: ${50 + (Math.random() - 0.5) * 60}%;
-          top: 60%;
-          background: ${colors[i % colors.length]};
-          --tx: ${(Math.random() - 0.5) * 120}px;
-          --ty: ${-40 - Math.random() * 80}px;
-          animation: confettiFall ${0.5 + Math.random() * 0.4}s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        `;
-        card.appendChild(particle);
-        setTimeout(() => particle.remove(), 1000);
-      }
-    }
-
-    setTimeout(() => setCelebrating(false), 600);
-  };
+    setAdded(true);
+    setReceipt(true);
+    setTimeout(() => setAdded(false), 1600);
+  }, [addToCart, tier.slug, note]);
 
   return (
+    <>
     <div className="gift-card" data-gift={tier.slug}>
       <div
         className="gift-card-visual"
@@ -82,13 +66,17 @@ function GiftCard({ tier }) {
           />
         </label>
         <button
-          className={`btn btn-primary btn-block gift-add${celebrating ? " celebrating" : ""}`}
+          className={`btn btn-primary btn-block gift-add${added ? " added" : ""}`}
           onClick={handleAdd}
         >
           Add to Cart &middot; Rs. {tier.price}
         </button>
       </div>
     </div>
+    {receipt && (
+      <CartReceipt item={{ name: tier.name, price: tier.price }} onDone={() => setReceipt(false)} />
+    )}
+    </>
   );
 }
 

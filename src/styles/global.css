@@ -2318,38 +2318,22 @@ footer {
 }
 
 /* Gift card celebration burst */
+.gift-add.added {
+  background: linear-gradient(135deg, var(--secondary), #c44d8a) !important;
+  animation: celebrationBurst 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
 @keyframes celebrationBurst {
   0% { transform: scale(1); }
-  15% { transform: scale(0.95); }
-  30% { transform: scale(1.08); }
-  50% { transform: scale(0.98); }
-  70% { transform: scale(1.03); }
+  40% { transform: scale(1.06); }
   100% { transform: scale(1); }
 }
 
-.gift-add.celebrating {
-  animation: celebrationBurst 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-  background: linear-gradient(135deg, var(--secondary), #c44d8a) !important;
-}
-
-/* Gift card confetti particles */
-.gift-card {
-  position: relative;
-  overflow: visible;
-}
-
-.confetti-particle {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 10;
-}
-
-@keyframes confettiFall {
-  0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
-  100% { transform: translate(var(--tx), var(--ty)) rotate(720deg) scale(0); opacity: 0; }
+/* Primary button added state (product detail) */
+.btn-added {
+  background: var(--secondary-fixed-dim) !important;
+  color: var(--on-secondary-fixed) !important;
+  animation: addPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* Scroll reveal */
@@ -2774,4 +2758,257 @@ main {
 
 .contact-form-side {
   min-width: 0;
+}
+
+/* ================= Receipt Animations ================= */
+
+/* Mini cart receipt — prints from the add-to-cart button */
+.cart-receipt {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  padding-top: 20vh;
+}
+
+.receipt-paper {
+  width: 220px;
+  background: #fffef8;
+  border: 1px solid #e8e0d0;
+  border-radius: 2px;
+  padding: 16px 14px 0;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 12px;
+  color: #2a180d;
+  box-shadow: 0 8px 32px rgba(42, 24, 13, 0.18), 0 2px 8px rgba(42, 24, 13, 0.1);
+  animation: receiptPrint 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transform-origin: top center;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes receiptPrint {
+  0% {
+    transform: scaleY(0) translateY(-20px);
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.receipt-header {
+  text-align: center;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding-bottom: 6px;
+}
+
+.receipt-subheader {
+  text-align: center;
+  font-size: 10px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding-bottom: 4px;
+}
+
+.receipt-divider {
+  border-top: 1px dashed #ccc;
+  margin: 8px 0;
+}
+
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 0;
+  font-size: 12px;
+}
+
+.receipt-row span:first-child {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.receipt-total {
+  font-weight: 700;
+  font-size: 13px;
+  padding: 4px 0;
+}
+
+.receipt-footer {
+  text-align: center;
+  font-size: 10px;
+  color: var(--secondary);
+  font-weight: 600;
+  padding: 6px 0 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  animation: fadeInUp 0.3s ease 0.3s backwards;
+}
+
+.receipt-footer-small {
+  text-align: center;
+  font-size: 9px;
+  color: #999;
+  padding-bottom: 8px;
+  animation: fadeInUp 0.3s ease 0.4s backwards;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.receipt-stamp {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-12deg);
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--secondary);
+  border: 3px solid var(--secondary);
+  border-radius: 6px;
+  padding: 4px 14px;
+  letter-spacing: 3px;
+  opacity: 0;
+  animation: stampSlam 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s forwards;
+}
+
+@keyframes stampSlam {
+  0% { opacity: 0; transform: translate(-50%, -50%) rotate(-12deg) scale(2.5); }
+  60% { opacity: 0.85; transform: translate(-50%, -50%) rotate(-12deg) scale(0.95); }
+  100% { opacity: 0.7; transform: translate(-50%, -50%) rotate(-12deg) scale(1); }
+}
+
+/* Zigzag bottom edge */
+.receipt-zigzag {
+  position: relative;
+  height: 10px;
+  margin: 0 -14px;
+  background: linear-gradient(135deg, #fffef8 33.33%, transparent 33.33%) 0 0,
+    linear-gradient(225deg, #fffef8 33.33%, transparent 33.33%) 0 0;
+  background-size: 10px 100%;
+  background-repeat: repeat-x;
+}
+
+/* Exit animation for mini receipt */
+.cart-receipt.fade-out {
+  animation: receiptFadeOut 0.3s ease forwards;
+}
+
+@keyframes receiptFadeOut {
+  to { opacity: 0; transform: translateY(-20px) scale(0.95); }
+}
+
+/* Full order receipt overlay */
+.order-receipt-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(42, 24, 13, 0.4);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 8vh;
+  animation: overlayFadeIn 0.3s ease;
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.order-receipt {
+  animation: receiptSlideDown 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.receipt-paper-full {
+  width: 300px;
+  padding-bottom: 0;
+}
+
+/* Paper texture noise */
+.receipt-paper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+@keyframes receiptSlideDown {
+  0% {
+    transform: translateY(-100%) scaleY(0.3);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scaleY(1);
+    opacity: 1;
+  }
+}
+
+/* Order receipt line items stagger in */
+.order-receipt .receipt-row {
+  animation: receiptLineIn 0.3s ease backwards;
+}
+
+.order-receipt .receipt-row:nth-child(1) { animation-delay: 0.3s; }
+.order-receipt .receipt-row:nth-child(2) { animation-delay: 0.4s; }
+.order-receipt .receipt-row:nth-child(3) { animation-delay: 0.5s; }
+.order-receipt .receipt-row:nth-child(4) { animation-delay: 0.6s; }
+.order-receipt .receipt-row:nth-child(5) { animation-delay: 0.7s; }
+.order-receipt .receipt-row:nth-child(6) { animation-delay: 0.8s; }
+
+@keyframes receiptLineIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Consistent button press effect for ALL primary buttons */
+.btn:active {
+  transform: scale(0.96);
+  transition: transform 0.1s ease;
+}
+
+/* Consistent card hover for all card-like elements */
+.form-card,
+.box-summary,
+.policy-banner,
+.gift-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-card:hover,
+.box-summary:hover,
+.policy-banner:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(42, 24, 13, 0.08);
+}
+
+/* Consistent chip hover */
+.chip {
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.chip:hover {
+  transform: scale(1.04);
 }

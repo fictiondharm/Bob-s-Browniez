@@ -1,11 +1,22 @@
+import { useState, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
 import { products } from "../data/products";
 import { useApp } from "../context/AppContext";
+import { CartReceipt } from "../components/Receipt";
 
 export default function ProductDetail() {
   const { slug } = useParams();
   const { addToCart } = useApp();
   const product = products.find((p) => p.slug === slug);
+  const [added, setAdded] = useState(false);
+  const [receipt, setReceipt] = useState(false);
+
+  const handleAdd = useCallback(() => {
+    addToCart(product.slug);
+    setAdded(true);
+    setReceipt(true);
+    setTimeout(() => setAdded(false), 1600);
+  }, [addToCart, product]);
 
   if (!product) {
     return (
@@ -31,6 +42,7 @@ export default function ProductDetail() {
   ];
 
   return (
+    <>
     <section className="section">
       <div className="container">
         <Link to="/shop" className="section-head-link mb-stack-md" style={{ display: "inline-flex", marginBottom: 16 }}>
@@ -132,18 +144,22 @@ export default function ProductDetail() {
                 Rs. {product.price} <small style={{ fontSize: 14 }}>{product.unit}</small>
               </span>
               <button
-                className="btn btn-primary"
-                onClick={() => addToCart(product.slug)}
+                className={`btn btn-primary${added ? " btn-added" : ""}`}
+                onClick={handleAdd}
               >
                 <span className="material-symbols-outlined" style={{ fontSize: 18 }}>
-                  shopping_cart
+                  {added ? "check" : "shopping_cart"}
                 </span>
-                Add to Cart
+                {added ? "Added!" : "Add to Cart"}
               </button>
             </div>
           </div>
         </div>
       </div>
     </section>
+    {receipt && (
+      <CartReceipt item={product} onDone={() => setReceipt(false)} />
+    )}
+    </>
   );
 }

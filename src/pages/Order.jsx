@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { useApp } from "../context/AppContext";
+import { OrderReceipt } from "../components/Receipt";
 
 const STEPS = [
   { icon: "shopping_cart", title: "Pick your bites", desc: "Choose from the menu or build a box." },
@@ -13,16 +14,23 @@ export default function Order() {
   const box = location.state || null;
   const { cartItems, cartCount, removeFromCart, clearCart } = useApp();
   const [placed, setPlaced] = useState(false);
+  const [receiptItems, setReceiptItems] = useState([]);
+  const [receiptTotal, setReceiptTotal] = useState(0);
+  const [showReceipt, setShowReceipt] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = useCallback((e) => {
     e.preventDefault();
+    setReceiptItems([...cartItems]);
+    setReceiptTotal(cartItems.reduce((s, i) => s + i.price, 0));
+    setShowReceipt(true);
     setPlaced(true);
     clearCart();
     window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  }, [cartItems, clearCart]);
 
   if (placed) {
     return (
+      <>
       <section className="section">
         <div className="container">
           <div className="form-card">
@@ -40,6 +48,14 @@ export default function Order() {
           </div>
         </div>
       </section>
+      {showReceipt && (
+        <OrderReceipt
+          items={receiptItems}
+          total={receiptTotal}
+          onDone={() => setShowReceipt(false)}
+        />
+      )}
+      </>
     );
   }
 
