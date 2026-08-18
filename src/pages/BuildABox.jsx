@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { products } from "../data/products";
 import { useApp } from "../context/AppContext";
+import { CartReceipt } from "../components/Receipt";
 
 const SIZES = {
   6: { label: "6 bites", price: 390, perBite: 65 },
@@ -9,10 +10,11 @@ const SIZES = {
 };
 
 export default function BuildABox() {
-  const { showToast } = useApp();
+  const { showToast, addToCart } = useApp();
   const navigate = useNavigate();
   const [size, setSize] = useState(6);
   const [selected, setSelected] = useState([]);
+  const [receipt, setReceipt] = useState(false);
 
   const available = useMemo(() => products.filter((p) => p.category !== "giftbox"), []);
 
@@ -76,9 +78,9 @@ export default function BuildABox() {
       showToast("Pick at least one flavor first.");
       return;
     }
-    navigate("/order", {
-      state: { boxSize: size, flavors: selected },
-    });
+    addToCart(`box-${size}`, `Custom box: ${selected.filter(Boolean).join(", ")}`);
+    setReceipt(true);
+    showToast("Box added to cart!");
   };
 
   return (
@@ -251,12 +253,18 @@ export default function BuildABox() {
                 style={{ marginTop: 20 }}
                 onClick={continueOrder}
               >
-                {isFull ? "Continue to Order" : "Continue to Order"}
+                {isFull ? "Add Box to Cart" : "Add Box to Cart"}
               </button>
             </aside>
           </div>
         </div>
       </section>
+      {receipt && (
+        <CartReceipt
+          item={{ name: `${size} Bites Custom Box`, price: total }}
+          onDone={() => setReceipt(false)}
+        />
+      )}
     </>
   );
 }

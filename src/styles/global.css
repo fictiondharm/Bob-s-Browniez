@@ -2313,10 +2313,6 @@ footer {
   100% { transform: translateY(100%) scale(0.9); opacity: 0; }
 }
 
-.toast {
-  animation: toastIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
 /* Gift card celebration burst */
 .gift-add.added {
   background: linear-gradient(135deg, var(--secondary), #c44d8a) !important;
@@ -2762,57 +2758,45 @@ main {
 
 /* ================= Receipt Animations ================= */
 
-/* Mini cart receipt — prints from the add-to-cart button */
+/* Mini cart receipt — small card bottom-right */
 .cart-receipt {
   position: fixed;
+  bottom: 24px;
+  right: 24px;
   z-index: 9999;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
   pointer-events: none;
-  display: flex;
-  justify-content: center;
-  padding-top: 20vh;
+  animation: receiptSlideUp 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+             receiptFadeOut 0.3s ease 1.7s forwards;
+}
+
+@keyframes receiptSlideUp {
+  from { transform: translateY(16px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes receiptFadeOut {
+  to { transform: translateY(-8px); opacity: 0; }
 }
 
 .receipt-paper {
-  width: 220px;
+  width: 240px;
   background: #fffef8;
   border: 1px solid #e8e0d0;
-  border-radius: 2px;
-  padding: 16px 14px 0;
+  border-radius: 8px;
+  padding: 12px 14px;
   font-family: "Courier New", Courier, monospace;
   font-size: 12px;
   color: #2a180d;
-  box-shadow: 0 8px 32px rgba(42, 24, 13, 0.18), 0 2px 8px rgba(42, 24, 13, 0.1);
-  animation: receiptPrint 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  transform-origin: top center;
-  position: relative;
-  overflow: hidden;
-}
-
-@keyframes receiptPrint {
-  0% {
-    transform: scaleY(0) translateY(-20px);
-    opacity: 0;
-  }
-  40% {
-    opacity: 1;
-  }
-  100% {
-    transform: scaleY(1) translateY(0);
-    opacity: 1;
-  }
+  box-shadow: 0 4px 16px rgba(42, 24, 13, 0.12);
 }
 
 .receipt-header {
   text-align: center;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 13px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  padding-bottom: 6px;
+  padding-bottom: 4px;
 }
 
 .receipt-subheader {
@@ -2826,28 +2810,32 @@ main {
 
 .receipt-divider {
   border-top: 1px dashed #ccc;
-  margin: 8px 0;
+  margin: 6px 0;
 }
 
 .receipt-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 3px 0;
+  padding: 2px 0;
   font-size: 12px;
 }
 
-.receipt-row span:first-child {
-  max-width: 140px;
+.receipt-item-name {
+  max-width: 150px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+.receipt-item-price {
+  font-weight: 600;
+}
+
 .receipt-total {
   font-weight: 700;
   font-size: 13px;
-  padding: 4px 0;
+  padding: 3px 0;
 }
 
 .receipt-footer {
@@ -2855,23 +2843,16 @@ main {
   font-size: 10px;
   color: var(--secondary);
   font-weight: 600;
-  padding: 6px 0 4px;
+  padding: 4px 0 2px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  animation: fadeInUp 0.3s ease 0.3s backwards;
 }
 
 .receipt-footer-small {
   text-align: center;
   font-size: 9px;
   color: #999;
-  padding-bottom: 8px;
-  animation: fadeInUp 0.3s ease 0.4s backwards;
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  padding-bottom: 6px;
 }
 
 .receipt-stamp {
@@ -2879,7 +2860,7 @@ main {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(-12deg);
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 900;
   color: var(--secondary);
   border: 3px solid var(--secondary);
@@ -2899,21 +2880,12 @@ main {
 /* Zigzag bottom edge */
 .receipt-zigzag {
   position: relative;
-  height: 10px;
+  height: 8px;
   margin: 0 -14px;
   background: linear-gradient(135deg, #fffef8 33.33%, transparent 33.33%) 0 0,
     linear-gradient(225deg, #fffef8 33.33%, transparent 33.33%) 0 0;
-  background-size: 10px 100%;
+  background-size: 8px 100%;
   background-repeat: repeat-x;
-}
-
-/* Exit animation for mini receipt */
-.cart-receipt.fade-out {
-  animation: receiptFadeOut 0.3s ease forwards;
-}
-
-@keyframes receiptFadeOut {
-  to { opacity: 0; transform: translateY(-20px) scale(0.95); }
 }
 
 /* Full order receipt overlay */
@@ -2921,12 +2893,12 @@ main {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: rgba(42, 24, 13, 0.4);
+  background: rgba(42, 24, 13, 0.3);
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  padding-top: 8vh;
   animation: overlayFadeIn 0.3s ease;
+  cursor: pointer;
 }
 
 @keyframes overlayFadeIn {
@@ -2935,35 +2907,13 @@ main {
 }
 
 .order-receipt {
-  animation: receiptSlideDown 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: receiptSlideDown 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: default;
 }
 
 .receipt-paper-full {
   width: 300px;
-  padding-bottom: 0;
-}
-
-/* Paper texture noise */
-.receipt-paper::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events: none;
-}
-
-@keyframes receiptSlideDown {
-  0% {
-    transform: translateY(-100%) scaleY(0.3);
-    opacity: 0;
-  }
-  30% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(0) scaleY(1);
-    opacity: 1;
-  }
+  position: relative;
 }
 
 /* Order receipt line items stagger in */
@@ -2977,6 +2927,12 @@ main {
 .order-receipt .receipt-row:nth-child(4) { animation-delay: 0.6s; }
 .order-receipt .receipt-row:nth-child(5) { animation-delay: 0.7s; }
 .order-receipt .receipt-row:nth-child(6) { animation-delay: 0.8s; }
+
+@keyframes receiptSlideDown {
+  0% { transform: translateY(-40px) scaleY(0.3); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateY(0) scaleY(1); opacity: 1; }
+}
 
 @keyframes receiptLineIn {
   from { opacity: 0; transform: translateX(-8px); }

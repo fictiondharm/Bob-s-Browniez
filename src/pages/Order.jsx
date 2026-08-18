@@ -173,7 +173,15 @@ export default function Order() {
                   </div>
                   <div className="field">
                     <label htmlFor="phone">Phone</label>
-                    <input type="tel" id="phone" name="phone" required placeholder="+91 98765 43210" />
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      required
+                      placeholder="+91 98765 43210"
+                      inputMode="numeric"
+                      pattern="[0-9+\-\s]*"
+                    />
                   </div>
                 </div>
                 <div className="field">
