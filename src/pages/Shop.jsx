@@ -1,6 +1,14 @@
 import { useMemo, useState } from "react";
-import { products } from "../data/products";
+import { products as defaultProducts } from "../data/products";
 import ProductCard from "../components/ProductCard";
+
+function getProducts() {
+  try {
+    const stored = JSON.parse(localStorage.getItem("bobs-admin-products"));
+    if (stored && stored.length > 0) return stored;
+  } catch {}
+  return defaultProducts;
+}
 
 const FILTERS = [
   { key: "brownie", label: "Brownies" },
@@ -18,6 +26,7 @@ export default function Shop() {
   const [filter, setFilter] = useState("all");
   const [sort, setSort] = useState("featured");
 
+  const products = useMemo(() => getProducts(), []);
   const visible = useMemo(() => {
     const shopOnly = products.filter((p) => p.category === "brownie" || p.category === "blondie");
     let list = filter === "all" ? shopOnly : shopOnly.filter((p) => p.category === filter);

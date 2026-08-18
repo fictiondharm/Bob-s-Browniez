@@ -45,7 +45,7 @@ export default function Navbar() {
             <span className="material-symbols-outlined">shopping_cart</span>
             {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
           </button>
-          <Link to="/order" className="nav-cta">
+          <Link to="/shop" className="nav-cta">
             Order Now
           </Link>
           <button

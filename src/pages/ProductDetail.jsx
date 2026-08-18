@@ -1,12 +1,21 @@
 import { useState, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
-import { products } from "../data/products";
+import { products as defaultProducts } from "../data/products";
 import { useApp } from "../context/AppContext";
 import { CartReceipt } from "../components/Receipt";
+
+function getProducts() {
+  try {
+    const stored = JSON.parse(localStorage.getItem("bobs-admin-products"));
+    if (stored && stored.length > 0) return stored;
+  } catch {}
+  return defaultProducts;
+}
 
 export default function ProductDetail() {
   const { slug } = useParams();
   const { addToCart } = useApp();
+  const products = getProducts();
   const product = products.find((p) => p.slug === slug);
   const [added, setAdded] = useState(false);
   const [receipt, setReceipt] = useState(false);

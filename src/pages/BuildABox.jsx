@@ -1,8 +1,16 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { products } from "../data/products";
+import { products as defaultProducts } from "../data/products";
 import { useApp } from "../context/AppContext";
 import { CartReceipt } from "../components/Receipt";
+
+function getProducts() {
+  try {
+    const stored = JSON.parse(localStorage.getItem("bobs-admin-products"));
+    if (stored && stored.length > 0) return stored;
+  } catch {}
+  return defaultProducts;
+}
 
 const SIZES = {
   6: { label: "6 bites", price: 390, perBite: 65 },
@@ -12,11 +20,12 @@ const SIZES = {
 export default function BuildABox() {
   const { showToast, addToCart } = useApp();
   const navigate = useNavigate();
+  const products = useMemo(() => getProducts(), []);
   const [size, setSize] = useState(6);
   const [selected, setSelected] = useState([]);
   const [receipt, setReceipt] = useState(false);
 
-  const available = useMemo(() => products.filter((p) => p.category === "brownie" || p.category === "blondie"), []);
+  const available = useMemo(() => products.filter((p) => p.category === "brownie" || p.category === "blondie"), [products]);
 
   const toggle = (slug) => {
     setSelected((prev) => {

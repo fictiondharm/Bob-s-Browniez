@@ -1,7 +1,8 @@
 import { useState, useCallback } from "react";
 import { useLocation, Link } from "react-router-dom";
+import QRCode from "react-qr-code";
 import { useApp } from "../context/AppContext";
-import { OrderReceipt } from "../components/Receipt";
+import { saveOrder, generateOrderId, getSettings } from "../data/store";
 
 const STEPS = [
   { icon: "shopping_cart", title: "Pick your bites", desc: "Choose from the menu or build a box." },
@@ -13,49 +14,126 @@ export default function Order() {
   const location = useLocation();
   const box = location.state || null;
   const { cartItems, cartCount, removeFromCart, clearCart } = useApp();
-  const [placed, setPlaced] = useState(false);
-  const [receiptItems, setReceiptItems] = useState([]);
-  const [receiptTotal, setReceiptTotal] = useState(0);
-  const [showReceipt, setShowReceipt] = useState(false);
+  const [step, setStep] = useState("form"); // form | payment | done
+  const [orderData, setOrderData] = useState(null);
+  const [utr, setUtr] = useState("");
+  const settings = getSettings();
+  const total = cartItems.reduce((s, i) => s + i.price, 0);
 
-  const handleSubmit = useCallback((e) => {
-    e.preventDefault();
-    setReceiptItems([...cartItems]);
-    setReceiptTotal(cartItems.reduce((s, i) => s + i.price, 0));
-    setShowReceipt(true);
-    setPlaced(true);
+  const upiId = settings.upiId || "your-upi@paytm";
+  const upiUrl = `upi://pay?pa=${upiId}&pn=Bob's Browniez&am=${total}&cu=INR`;
+
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const id = generateOrderId();
+      const order = {
+        id,
+        name: fd.get("name"),
+        phone: fd.get("phone"),
+        email: fd.get("email"),
+        address: fd.get("address"),
+        deliveryDay: fd.get("delivery-day"),
+        orderType: fd.get("order-type"),
+        notes: fd.get("notes"),
+        items: cartItems.map((i) => ({ name: i.name, price: i.price, slug: i.slug, note: i.note || "" })),
+        total,
+        status: "pending_payment",
+        utr: "",
+        createdAt: new Date().toISOString(),
+      };
+      saveOrder(order);
+      setOrderData(order);
+      setStep("payment");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+    [cartItems, total]
+  );
+
+  const handleUtrSubmit = () => {
+    if (utr.trim().length < 6) return;
+    saveOrder({ id: orderData.id, utr: utr.trim(), status: "pending_verification" });
     clearCart();
+    setStep("done");
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [cartItems, clearCart]);
+  };
 
-  if (placed) {
+  if (step === "done") {
     return (
-      <>
       <section className="section">
-        <div className="container">
-          <div className="form-card">
+        <div className="container center">
+          <div className="form-card" style={{ maxWidth: 480, margin: "0 auto" }}>
             <div className="form-success">
               <span className="material-symbols-outlined">check_circle</span>
-              <h3 className="headline-lg">Order received!</h3>
-              <p>
-                We&rsquo;ll confirm your weekend slot on WhatsApp / email within a
-                few hours. See you Saturday!
+              <h3 className="headline-lg">Order placed!</h3>
+              <p style={{ marginBottom: 8 }}>
+                Order ID: <strong>{orderData.id}</strong>
               </p>
-              <Link to="/" className="btn btn-outline">
-                Back to home
+              <p style={{ marginBottom: 8 }}>
+                UTR: <strong>{utr}</strong>
+              </p>
+              <p className="text-muted" style={{ fontSize: 14, marginBottom: 20 }}>
+                We&apos;ll verify your payment and confirm via WhatsApp / email within a few hours.
+              </p>
+              <Link to="/shop" className="btn btn-primary">
+                Continue Shopping
               </Link>
             </div>
           </div>
         </div>
       </section>
-      {showReceipt && (
-        <OrderReceipt
-          items={receiptItems}
-          total={receiptTotal}
-          onDone={() => setShowReceipt(false)}
-        />
-      )}
-      </>
+    );
+  }
+
+  if (step === "payment") {
+    return (
+      <section className="section">
+        <div className="container center">
+          <span className="eyebrow eyebrow-brown">Payment</span>
+          <h1 className="headline-xl mt-stack-sm" style={{ fontSize: 36 }}>
+            Scan &amp; Pay
+          </h1>
+          <p className="body-md text-muted mt-stack-sm" style={{ maxWidth: 480, marginBottom: 32 }}>
+            Scan the QR code with any UPI app. Amount: <strong>Rs. {total}</strong>
+          </p>
+
+          <div className="form-card" style={{ maxWidth: 380, margin: "0 auto", padding: 32, textAlign: "center" }}>
+            <div style={{ background: "#fff", padding: 16, borderRadius: 12, display: "inline-block", marginBottom: 16 }}>
+              <QRCode value={upiUrl} size={200} />
+            </div>
+            <p style={{ fontSize: 13, color: "#666", marginBottom: 4 }}>UPI ID</p>
+            <p style={{ fontSize: 15, fontWeight: 700, marginBottom: 16, fontFamily: "monospace" }}>{upiId}</p>
+            <p style={{ fontSize: 20, fontWeight: 700, marginBottom: 24 }}>Rs. {total}</p>
+
+            <div className="field" style={{ textAlign: "left" }}>
+              <label htmlFor="utr">UTR / Transaction ID</label>
+              <input
+                type="text"
+                id="utr"
+                placeholder="Enter 12-digit UTR number"
+                value={utr}
+                onChange={(e) => setUtr(e.target.value.replace(/\D/g, "").slice(0, 12))}
+                inputMode="numeric"
+                pattern="[0-9]{6,12}"
+                maxLength={12}
+                required
+              />
+            </div>
+            <button
+              className="btn btn-primary btn-block"
+              style={{ marginTop: 16 }}
+              onClick={handleUtrSubmit}
+              disabled={utr.trim().length < 6}
+            >
+              Confirm Payment
+            </button>
+            <p className="text-muted" style={{ fontSize: 12, marginTop: 12 }}>
+              Order ID: {orderData.id}
+            </p>
+          </div>
+        </div>
+      </section>
     );
   }
 
@@ -86,25 +164,6 @@ export default function Order() {
                 <p>{s.desc}</p>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section" style={{ paddingTop: 0 }}>
-        <div className="container">
-          <div className="policy-banner mb-stack-lg bg-soft-yellow">
-            <span className="material-symbols-outlined" style={{ color: "var(--primary-container)" }}>
-              info
-            </span>
-            <div>
-              <h3 className="headline-md" style={{ color: "var(--primary-container)" }}>
-                Order by Friday noon
-              </h3>
-              <p className="body-md text-muted">
-                Orders placed after <strong>Friday 12:00 PM</strong> roll over to
-                the following weekend.
-              </p>
-            </div>
           </div>
         </div>
       </section>
@@ -175,8 +234,8 @@ export default function Order() {
                   </label>
                   <textarea id="notes" name="notes" placeholder="Flavors you'd love, allergies, gift message..." />
                 </div>
-                <button type="submit" className="btn btn-primary btn-block">
-                  Place My Order
+                <button type="submit" className="btn btn-primary btn-block" disabled={cartCount === 0}>
+                  Proceed to Payment
                 </button>
               </form>
             </div>
@@ -225,7 +284,7 @@ export default function Order() {
                   </div>
                   <div className="order-total">
                     <span>Total</span>
-                    <span>Rs. {cartItems.reduce((s, i) => s + i.price, 0)}</span>
+                    <span>Rs. {total}</span>
                   </div>
                   {cartCount > 0 && (
                     <button className="btn btn-outline btn-sm" style={{ marginTop: 12 }} onClick={clearCart}>
