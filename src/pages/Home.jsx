@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import heroVideo from "../assets/h2.mp4";
+import heroVideo from "../assets/hero.mp4";
 
 const BG_COLORS = ["#fff9f0", "#fff0d4", "#f9ebdf"];
 
