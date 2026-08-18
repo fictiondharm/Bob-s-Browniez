@@ -122,13 +122,14 @@ export default function BuildABox() {
               </div>
 
               <h2 className="headline-lg mb-stack-md">Step 2 - Choose your flavors</h2>
-              <div className="mini-grid">
-                {available.map((p) => {
+              <div className="mini-grid card-enter">
+                {available.map((p, i) => {
                   const count = countFor(p.slug);
                   return (
                     <div
                       key={p.slug}
                       className={`mini-card${count > 0 ? " active" : ""}`}
+                      style={{ animationDelay: `${i * 60}ms` }}
                       onClick={() => addFlavor(p.slug)}
                       onKeyDown={(e) => {
                         if (e.key === "Enter" || e.key === " ") {

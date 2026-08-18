@@ -112,57 +112,6 @@ export default function Order() {
       <section className="section" style={{ paddingTop: 0 }}>
         <div className="container">
           <div className="order-layout">
-            <div className="order-summary">
-              <h3 className="headline-md mb-stack-sm">Your Order</h3>
-              {cartCount === 0 && !box ? (
-                <div className="order-empty">
-                  <span className="material-symbols-outlined">shopping_basket</span>
-                  <p>Your cart is empty</p>
-                  <Link to="/shop" className="btn btn-outline btn-sm">
-                    Browse the menu
-                  </Link>
-                </div>
-              ) : (
-                <>
-                  <div className="order-items">
-                    {box && (
-                      <div className="order-item">
-                        <div className="order-item-info">
-                          <span className="order-item-name">Custom Box</span>
-                          <span className="order-item-meta">
-                            {box.flavors.length} of {box.boxSize} flavors
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                    {cartItems.map((item, i) => (
-                      <div className="order-item" key={`${item.slug}-${i}`}>
-                        <div className="order-item-info">
-                          <span className="order-item-name">{item.name}</span>
-                          <span className="order-item-meta">{item.category}</span>
-                          {item.note && (
-                            <span className="order-item-note">&ldquo;{item.note}&rdquo;</span>
-                          )}
-                        </div>
-                        <button
-                          className="order-item-remove"
-                          onClick={() => removeFromCart(i)}
-                          aria-label={`Remove ${item.name}`}
-                        >
-                          <span className="material-symbols-outlined">close</span>
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                  {cartCount > 0 && (
-                    <button className="btn btn-outline btn-sm" style={{ marginTop: 12 }} onClick={clearCart}>
-                      Clear cart
-                    </button>
-                  )}
-                </>
-              )}
-            </div>
-
             <div className="form-card order-form">
               <h2 className="headline-lg mb-stack-md">Checkout details</h2>
               <form onSubmit={handleSubmit}>
@@ -178,9 +127,11 @@ export default function Order() {
                       id="phone"
                       name="phone"
                       required
-                      placeholder="+91 98765 43210"
+                      placeholder="98765 43210"
                       inputMode="numeric"
-                      pattern="[0-9+\-\s]*"
+                      pattern="[0-9]{10}"
+                      maxLength={10}
+                      title="Phone number must be exactly 10 digits"
                     />
                   </div>
                 </div>
@@ -228,6 +179,61 @@ export default function Order() {
                   Place My Order
                 </button>
               </form>
+            </div>
+
+            <div className="order-summary">
+              <h3 className="headline-md mb-stack-sm">Your Order</h3>
+              {cartCount === 0 && !box ? (
+                <div className="order-empty">
+                  <span className="material-symbols-outlined">shopping_basket</span>
+                  <p>Your cart is empty</p>
+                  <Link to="/shop" className="btn btn-outline btn-sm">
+                    Browse the menu
+                  </Link>
+                </div>
+              ) : (
+                <>
+                  <div className="order-items">
+                    {box && (
+                      <div className="order-item">
+                        <div className="order-item-info">
+                          <span className="order-item-name">Custom Box</span>
+                          <span className="order-item-meta">
+                            {box.flavors.length} of {box.boxSize} flavors
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                    {cartItems.map((item, i) => (
+                      <div className="order-item" key={`${item.slug}-${i}`}>
+                        <div className="order-item-info">
+                          <span className="order-item-name">{item.name}</span>
+                          <span className="order-item-meta">{item.category}</span>
+                          {item.note && (
+                            <span className="order-item-note">&ldquo;{item.note}&rdquo;</span>
+                          )}
+                        </div>
+                        <button
+                          className="order-item-remove"
+                          onClick={() => removeFromCart(i)}
+                          aria-label={`Remove ${item.name}`}
+                        >
+                          <span className="material-symbols-outlined">close</span>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="order-total">
+                    <span>Total</span>
+                    <span>Rs. {cartItems.reduce((s, i) => s + i.price, 0)}</span>
+                  </div>
+                  {cartCount > 0 && (
+                    <button className="btn btn-outline btn-sm" style={{ marginTop: 12 }} onClick={clearCart}>
+                      Clear cart
+                    </button>
+                  )}
+                </>
+              )}
             </div>
           </div>
         </div>

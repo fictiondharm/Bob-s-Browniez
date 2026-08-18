@@ -1380,12 +1380,18 @@ footer {
   padding: 16px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
   background: var(--surface);
 }
 
 .size-option:hover {
   border-color: var(--secondary-fixed-dim);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(42, 24, 13, 0.08);
+}
+
+.size-option:active {
+  transform: scale(0.97);
 }
 
 .size-option.active {
@@ -2597,17 +2603,79 @@ main {
 
 @media (min-width: 768px) {
   .order-layout {
-    grid-template-columns: 320px 1fr;
+    grid-template-columns: 1fr 320px;
   }
 }
 
 .order-summary {
-  background: var(--surface-container-low);
+  background: #fffef8;
   border-radius: var(--radius-lg);
   padding: 24px;
-  border: 1px solid var(--surface-variant);
+  border: 1px solid #e8e0d0;
   position: sticky;
   top: 100px;
+  font-family: "Courier New", Courier, monospace;
+  position: relative;
+}
+
+/* Torn paper top edge */
+.order-summary::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: linear-gradient(135deg, transparent 33.33%, #fffef8 33.33%) 0 0,
+    linear-gradient(225deg, transparent 33.33%, #fffef8 33.33%) 0 0;
+  background-size: 10px 100%;
+  background-repeat: repeat-x;
+}
+
+/* Receipt header line */
+.order-summary .headline-md {
+  font-family: "Courier New", Courier, monospace;
+  text-align: center;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 14px;
+  border-bottom: 1px dashed #ccc;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+
+/* Receipt item rows */
+.order-item {
+  border-bottom: 1px dashed #eee;
+  padding: 8px 0;
+}
+
+.order-item-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.order-item-meta {
+  font-size: 11px;
+  color: #999;
+  text-transform: capitalize;
+}
+
+.order-item-note {
+  font-size: 11px;
+  font-style: italic;
+  color: var(--secondary);
+}
+
+/* Receipt total */
+.order-total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 15px;
+  border-top: 1px dashed #ccc;
+  padding-top: 10px;
+  margin-top: 10px;
 }
 
 .order-empty {
@@ -2943,6 +3011,16 @@ main {
 .btn:active {
   transform: scale(0.96);
   transition: transform 0.1s ease;
+}
+
+/* Hero Adopt a Brownie hover */
+.hero .btn-primary {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.hero .btn-primary:hover {
+  transform: rotate(-1deg) scale(1.06);
+  box-shadow: 0 8px 24px rgba(163, 52, 106, 0.3);
 }
 
 /* Consistent card hover for all card-like elements */
