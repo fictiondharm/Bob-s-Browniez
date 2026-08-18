@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { heroImages } from "../data/products";
-import mainImage from "../assets/main.png";
+import heroVideo from "../assets/h2.mp4";
 
 const BG_COLORS = ["#fff9f0", "#fff0d4", "#f9ebdf"];
 
@@ -10,7 +9,7 @@ export default function Home() {
 
   useEffect(() => {
     const id = setInterval(() => {
-      setIndex((i) => (i + 1) % heroImages.length);
+      setIndex((i) => (i + 1) % BG_COLORS.length);
     }, 2500);
     return () => clearInterval(id);
   }, []);
@@ -28,27 +27,26 @@ export default function Home() {
             <br />
             <span className="text-secondary squiggle-underline">Sorted.</span>
           </h1>
-            <p className="body-lg text-muted" style={{ maxWidth: 460 }}>
-              Indulge in our small-batch, handcrafted brownies and blondies. We
-              bake fresh every weekend to bring you the coziest moments.
-            </p>
-            <img src={mainImage} alt="" className="hero-stamp" />
-            <div className="btn-row">
-              <Link to="/shop" className="btn btn-primary" style={{ padding: "14px 40px", transform: "rotate(-3deg)" }}>
-                Adopt a Brownie
-              </Link>
-            </div>
+          <p className="body-lg text-muted" style={{ maxWidth: 460 }}>
+            Indulge in our small-batch, handcrafted brownies and blondies. We
+            bake fresh every weekend to bring you the coziest moments.
+          </p>
+          <div className="btn-row">
+            <Link to="/shop" className="btn btn-primary" style={{ padding: "14px 40px", transform: "rotate(-3deg)" }}>
+              Shop Now
+            </Link>
+          </div>
         </div>
         <div className="hero-visual">
           <div className="hero-blob">
-            {heroImages.map((src, i) => (
-              <img
-                key={src}
-                src={src}
-                alt="Freshly baked brownie"
-                className={`hero-slide${i === index ? " active" : ""}`}
-              />
-            ))}
+            <video
+              src={heroVideo}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="hero-video"
+            />
           </div>
         </div>
       </header>
