@@ -19,7 +19,8 @@ export default function Shop() {
   const [sort, setSort] = useState("featured");
 
   const visible = useMemo(() => {
-    let list = filter === "all" ? products : products.filter((p) => p.category === filter);
+    const shopOnly = products.filter((p) => p.category === "brownie" || p.category === "blondie");
+    let list = filter === "all" ? shopOnly : shopOnly.filter((p) => p.category === filter);
     const sorted = [...list];
     switch (sort) {
       case "price-asc":
@@ -37,7 +38,7 @@ export default function Shop() {
     return sorted;
   }, [filter, sort]);
 
-  const filterCount = (key) => products.filter((p) => p.category === key).length;
+  const filterCount = (key) => products.filter((p) => p.category === key && (key === "brownie" || key === "blondie")).length;
 
   const toggleFilter = (key) => {
     setFilter((prev) => (prev === key ? "all" : key));

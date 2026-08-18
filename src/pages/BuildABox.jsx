@@ -16,7 +16,7 @@ export default function BuildABox() {
   const [selected, setSelected] = useState([]);
   const [receipt, setReceipt] = useState(false);
 
-  const available = useMemo(() => products.filter((p) => p.category !== "giftbox"), []);
+  const available = useMemo(() => products.filter((p) => p.category === "brownie" || p.category === "blondie"), []);
 
   const toggle = (slug) => {
     setSelected((prev) => {
