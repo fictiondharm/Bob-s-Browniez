@@ -28,9 +28,9 @@ export function updateOrder(id, updates) {
 
 export function getSettings() {
   try {
-    return JSON.parse(localStorage.getItem(SETTINGS_KEY)) || { upiId: "", adminPassword: "admin123" };
+    return JSON.parse(localStorage.getItem(SETTINGS_KEY)) || { upiId: import.meta.env.VITE_UPI_ID || "", adminPassword: import.meta.env.VITE_ADMIN_PASSWORD || "admin123" };
   } catch {
-    return { upiId: "", adminPassword: "admin123" };
+    return { upiId: import.meta.env.VITE_UPI_ID || "", adminPassword: import.meta.env.VITE_ADMIN_PASSWORD || "admin123" };
   }
 }
 

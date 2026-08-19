@@ -4,3 +4,6 @@ legacy/
 stitch_chocolate_drip_navbar/
 devserver.log
 .main.png
+.env
+.env.local
+.env.*.local
